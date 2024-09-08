@@ -1,3 +1,4 @@
+export const HOST = "https://solcurate-api.onrender.com/api/v1"
 export const websiteLinks = [
     {
         label: 'Home',
@@ -114,5 +115,5 @@ export const settingLinks = [
         imgUrl: '/icons/sun.svg',
         status: 'active',
     },
-    
+
 ]

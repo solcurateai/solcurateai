@@ -1,5 +1,5 @@
 "use client"
-import React, { useState} from 'react'
+import React, { useState } from 'react'
 import ModeToggle from "@/components/ModeToggle";
 import Image from "next/image";
 import Link from 'next/link';
@@ -13,30 +13,31 @@ const Navbar = () => {
   const [authState, setAuthState] = useState(false)
   return (
     <>
-    <div className="sticky top-0 z-40 bg-background">
+      <div className="sticky top-0 z-40 bg-background">
         <div className="container mx-auto px-4">
           <div className="flex items-center justify-between py-5">
             <div className="w-auto">
               <div className="flex flex-wrap items-center">
                 <div className="w-auto pr-2">
-                    <Link href="/" className="flex items-center">
+                  <Link href="/" className="flex items-center">
                     <Image src="/images/logo.png" width={200} height={200} alt="Logo" />
-                    </Link>
+                  </Link>
                 </div>
               </div>
             </div>
             <div className="w-auto">
               <div className="hidden w-auto lg:block">
                 <div className="flex items-center">
-                    {websiteLinks.map((link) => {
-                        return (
-                        <Link key={link.label} href={link.route} className="mr-14 font-medium tracking-tight hover:text-accent-foreground">
-                            <p>
-                                {link.label}
-                            </p>
-                        </Link>
-                        )}      
-                    )}
+                  {websiteLinks.map((link) => {
+                    return (
+                      <Link key={link.label} href={link.route} className="mr-14 font-medium tracking-tight hover:text-accent-foreground">
+                        <p>
+                          {link.label}
+                        </p>
+                      </Link>
+                    )
+                  }
+                  )}
                 </div>
               </div>
             </div>
@@ -73,13 +74,13 @@ const Navbar = () => {
                       </div>
                       <span className="sr-only">Languages</span>
                     </button>
-
-                    <Button onClick={() => setAuthState('login')} href="/login" className="main-gradient inline-block rounded-lg px-8 py-3 text-center font-semibold tracking-tight !text-white transition duration-200 hover:font-bold bg-gradient-to-tr from-yellow-400 to-orange-600">Login</Button>
-                    
+                    <Link href='/login'>
+                      <Button className="main-gradient inline-block rounded-lg px-8 py-3 text-center font-semibold tracking-tight !text-white transition duration-200 hover:font-bold bg-gradient-to-tr from-yellow-400 to-orange-600">Login</Button>
+                    </Link>
                   </div>
                 </div>
                 <div className="w-auto lg:hidden">
-                    <MobileNav />
+                  <MobileNav />
                 </div>
               </div>
             </div>
@@ -93,7 +94,7 @@ const Navbar = () => {
         className="text-center"
         buttonText="Start Meeting"
         handleClick={() => createMeeting()}
-    />
+      />
     </>
   )
 }
