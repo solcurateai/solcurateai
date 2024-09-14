@@ -1,5 +1,5 @@
 "use client";
-import React, { useState, useRef } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import { useForm } from "react-hook-form";
 import { Input } from '@/components/ui/input';
 import { Button } from '@/components/ui/button';
@@ -8,17 +8,22 @@ import { useRouter } from 'next/navigation';
 import { toast, ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css'; // Import the toastify CSS
 import { OtpInput } from 'reactjs-otp-input';
+import { Check, Loader, X } from 'lucide-react';
 
 
 const Login = () => {
-  const { register, handleSubmit } = useForm(); // Single useForm instance
+  const { register, handleSubmit, watch } = useForm(); // Single useForm instance
   const [loginData, setLoginData] = useState(null);
-  const [otpRequired, setOtpRequired] = useState(true);
+  const [otpRequired, setOtpRequired] = useState(false);
   const [otp, setOtp] = useState(["", "", "", ""]);
   const inputRefs = useRef([]);
   const [usernameRequired, setUsernameRequired] = useState(false);
   const [loading, setLoading] = useState(false); // State to manage loading
   const router = useRouter();
+  const [usernameAvailable, setUsernameAvailable] = useState(null);
+  const [isCheckingUsername, setIsCheckingUsername] = useState(false);
+  const [accessToken, setAccessToken] = useState(null)
+
 
 
   // Function to show loader toast
@@ -68,7 +73,7 @@ const Login = () => {
       });
       const responseData = await response.json();
       dismissLoader(); // Dismiss the loader after response
-
+      
       if (responseData.success) {
         setLoginData(responseData.data);
         toast.success('Login successful!');
@@ -95,12 +100,12 @@ const Login = () => {
     } else {
       showLoader();
       try {
-        const otpResponse = await fetch(`${HOST}/User/VerifyOtp`, {
+        const otpResponse = await fetch(`${HOST}/User/Verify`, {
           method: "POST",
           headers: {
             'Content-Type': 'application/json',
           },
-          body: JSON.stringify({ ...data, email: loginData.email }),
+          body: JSON.stringify({ userId: loginData.id, otp: completeOtp }),
         });
 
         const otpResponseData = await otpResponse.json();
@@ -110,6 +115,7 @@ const Login = () => {
           if (!otpResponseData.data.username || otpResponseData.data.username === " ") {
             setUsernameRequired(true);
             setOtpRequired(false);
+            setAccessToken(otpResponseData.data.accessToken);
             toast.success('OTP verified. Please set your username.');
           } else {
             router.push("/dashboard");
@@ -126,20 +132,59 @@ const Login = () => {
 
   };
 
+
+  useEffect(() => {
+    const delayDebounceFn = setTimeout(() => {
+      if (watch("username")) {
+        checkUsernameAvailability(watch("username"));
+      }
+    }, 500); // delay by 500ms
+  
+    return () => clearTimeout(delayDebounceFn);
+  }, [watch("username")]);
+
+  const checkUsernameAvailability = async (username) => {
+    setIsCheckingUsername(true);
+    try {
+      const response = await fetch(`${HOST}/User/Profile/CheckUsername`, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          "Authorization": `Bearer ${accessToken}`,
+        },
+        body: JSON.stringify({ username }),
+      });
+  
+      const data = await response.json();
+      if (data.success) {
+        setUsernameAvailable(true);
+      } else {
+        setUsernameAvailable(false);
+      }
+    } catch (error) {
+      console.log("Error checking username", error);
+    } finally {
+      setIsCheckingUsername(false);
+    }
+  };
+  
+  
+
   const onUsernameSubmit = async (data) => {
     showLoader();
     try {
-      const usernameResponse = await fetch(`${HOST}/User/SetUsername`, {
-        method: "POST",
+      const usernameResponse = await fetch(`${HOST}/User/Profile/UpdateUsername`, {
+        method: "PATCH",
         headers: {
-          'Content-Type': 'application/json',
+          "Content-Type": "application/json",
+          "Authorization": `Bearer ${accessToken}`,
         },
-        body: JSON.stringify({ ...data, email: loginData.email }),
+        body: JSON.stringify({ username: data.username }),
       });
 
       const usernameResponseData = await usernameResponse.json();
       dismissLoader();
-
+      console.log(usernameResponseData);
       if (usernameResponseData.success) {
         toast.success('Username set successfully!');
         router.push("/dashboard");
@@ -167,19 +212,39 @@ const Login = () => {
         {/* Username Setup Form */}
         {usernameRequired ? (
           <form onSubmit={handleSubmit(onUsernameSubmit)} className="flex flex-col gap-4">
+          <div className="relative flex items-center w-full">
             <Input
-              className="bg-[#252C33] h-[52px] text-lg mt-5"
+              className={`bg-[#252C33] h-[52px] text-lg mt-5 w-full pr-10 ${
+                usernameAvailable === false && !isCheckingUsername && watch("username") ? "border-red-500" : ""
+              } ${
+                usernameAvailable === true && !isCheckingUsername && watch("username") ? "border-green-500" : ""
+              }`}
               type="text"
               placeholder="Set your username"
               {...register("username")}
             />
-            <Button
-              className="main-gradient inline-block rounded-lg w-full my-5 px-8 py-3 text-center font-semibold tracking-tight !text-white transition duration-200 hover:font-bold bg-gradient-to-tr from-yellow-400 to-orange-600"
-              type="submit"
-            >
-              Set Username
-            </Button>
-          </form>
+        
+            {watch("username") && isCheckingUsername && (
+              <Loader className="absolute right-2 top-8 text-sm text-gray-500" />
+            )}
+            {watch("username") && usernameAvailable === false && !isCheckingUsername && (
+              <X className="absolute right-2 top-8 text-sm text-red-500" />
+            )}
+            {watch("username") && usernameAvailable === true && !isCheckingUsername && (
+              <Check className="absolute right-2 top-8 text-green-500" />
+            )}
+          </div>
+        
+          <Button
+            className="main-gradient inline-block rounded-lg w-full my-5 px-8 py-3 text-center font-semibold tracking-tight !text-white transition duration-200 hover:font-bold bg-gradient-to-tr from-yellow-400 to-orange-600"
+            type="submit"
+            disabled={isCheckingUsername || usernameAvailable === false || !watch("username")} // Disable if username is not available, still checking, or empty
+          >
+            Set Username
+          </Button>
+        </form>
+        
+        
         ) : otpRequired ? (
           // OTP Verification Form
           <form onSubmit={handleSubmit(onOtpSubmit)} className="flex flex-col gap-4">
