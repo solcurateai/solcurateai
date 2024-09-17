@@ -2,6 +2,8 @@ import { Quicksand } from "next/font/google";
 import "./globals.css";
 import { ThemeProvider } from "@/components/theme-provider";
 import Head from "next/head";
+import StoreProvider from "./StoreProvider";
+import AppWalletProvider from "@/components/AppWalletProvider";
 
 const inter = Quicksand({ subsets: ["latin"] });
 
@@ -27,7 +29,10 @@ export default function RootLayout({ children }) {
           enableSystem
           disableTransitionOnChange
         >
-          {children}
+          
+          <StoreProvider>
+            <AppWalletProvider>{children}</AppWalletProvider>
+          </StoreProvider>
         </ThemeProvider>
       </body>
     </html>

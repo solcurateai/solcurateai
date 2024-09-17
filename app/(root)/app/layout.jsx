@@ -1,3 +1,4 @@
+"use client"
 import ModeToggle2 from '@/components/ModeToggle2'
 import Navbar from '@/components/Navbar'
 import Sidebar from '@/components/Sidebar'
@@ -5,9 +6,21 @@ import { Button } from '@/components/ui/button'
 import { HelpCircle } from 'lucide-react'
 import Image from 'next/image'
 import Link from 'next/link'
-import React from 'react'
+import { useRouter } from 'next/navigation'
+import React, { useEffect, useState } from 'react'
 
-const RootLayout = ({children}) => {
+const RootLayout = ({ children }) => {
+  // const router = useRouter();
+  // const [isAuthenticated, setIsAuthenticated] = useState(false);
+
+  // useEffect(() => {
+  //   const userDetails = localStorage.getItem('userDetails');
+  //   if (!userDetails) {
+  //     // Redirect to login page if no user details are found
+  //     router.replace('/login');
+  //   }
+  // }, []);
+
   return (
     <div className="grid min-h-screen w-full md:grid-cols-[220px_1fr] lg:grid-cols-[340px_1fr]">
       <div className="hidden bg-black-1 md:block">
@@ -21,16 +34,15 @@ const RootLayout = ({children}) => {
             <Sidebar />
           </div>
         </div>
-
       </div>
       <div className="flex w-full flex-col">
         <Navbar />
         <main className="flex flex-1 flex-col gap-4 p-4 bg-black-2 md:gap-8 md:p-8">
-            {children}
+          {children}
         </main>
       </div>
     </div>
-  )
-}
+  );
+};
 
-export default RootLayout
+export default RootLayout;

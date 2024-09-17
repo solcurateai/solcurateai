@@ -1,9 +1,4 @@
 import AppCard from '@/components/AppCard'
-import Navbar from '@/components/Navbar'
-import Sidebar from '@/components/Sidebar'
-import { Button } from '@/components/ui/button'
-import Image from 'next/image'
-import Link from 'next/link'
 import React from 'react'
 
 const cardList = [
@@ -57,7 +52,7 @@ const Dashboard = () => {
         <h1 className="font-clash text-white text-[40px] font-semibold">Dashboard</h1>
         <p className="font-semibold text-2xl text-black-4 font-quicksand">Chat with the smartest AI - Experience the power of AI with us</p>
       </div>
-      <div className="grid grid-cols-3 gap-4 my-6">
+      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 my-6">
         {cardList.map((card) => {
           return (
             <AppCard key={card.title} card={card} />

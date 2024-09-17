@@ -44,7 +44,7 @@ const Sidebar = () => {
               </p>
               </div>
               {link.status === "inactive" && 
-              <div className="main-gradient rounded-lg p-1">
+              <div className="main-gradient max-lg:hidden rounded-lg p-1">
                 <p className="text-white font-semibold text-[10px]">Coming soon</p>
               </div>
               }

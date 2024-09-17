@@ -1,5 +1,6 @@
 "use client";
 import React, { useState, useEffect, useRef } from 'react';
+import { useDispatch, useSelector } from 'react-redux';
 import { useForm } from "react-hook-form";
 import { Input } from '@/components/ui/input';
 import { Button } from '@/components/ui/button';
@@ -9,6 +10,9 @@ import { toast, ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css'; // Import the toastify CSS
 import { OtpInput } from 'reactjs-otp-input';
 import { Check, Loader, X } from 'lucide-react';
+import { setUser, setUsernameAvailability, setCheckingUsername, setAccessToken } from '@/redux/slices/userSlices';
+import { WalletMultiButton } from '@solana/wallet-adapter-react-ui';
+import WalletConnection from '@/components/WalletConnection';
 
 
 const Login = () => {
@@ -20,11 +24,9 @@ const Login = () => {
   const [usernameRequired, setUsernameRequired] = useState(false);
   const [loading, setLoading] = useState(false); // State to manage loading
   const router = useRouter();
-  const [usernameAvailable, setUsernameAvailable] = useState(null);
-  const [isCheckingUsername, setIsCheckingUsername] = useState(false);
-  const [accessToken, setAccessToken] = useState(null)
 
-
+  const dispatch = useDispatch();
+  const { userData, isAuthenticated, isCheckingUsername, usernameAvailable, accessToken } = useSelector(state => state.user);
 
   // Function to show loader toast
   const showLoader = () => {
@@ -61,143 +63,130 @@ const Login = () => {
     }
   };
 
-  const onEmailSubmit = async (data) => {
-    showLoader(); // Show loader when API call starts
-    try {
-      const response = await fetch(`${HOST}/User/SignIn?type=email`, {
-        method: "POST",
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify(data),
-      });
-      const responseData = await response.json();
-      dismissLoader(); // Dismiss the loader after response
-      
-      if (responseData.success) {
-        setLoginData(responseData.data);
-        toast.success('Login successful!');
+// Handle email login
+const onEmailSubmit = async (data) => {
+  showLoader();
+  try {
+    const response = await fetch(`${HOST}/User/SignIn?type=email`, {
+      method: "POST",
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(data),
+    });
+    const responseData = await response.json();
+    dismissLoader();
+    
+    if (responseData.success) {
+      dispatch(setUser(responseData.data));
+      dispatch(setAccessToken(responseData.data.accessToken));
 
-        if (responseData.data.username === " ") {
-          setOtpRequired(true); // Show OTP form if username is empty
-        } else {
-          router.push("/app"); // Redirect to dashboard
-        }
+      if (!responseData.data.username || responseData.data.username === " ") {
+        setOtpRequired(true);
       } else {
-        toast.error('Login failed. Please try again.');
+        router.push("/app");
       }
-    } catch (error) {
-      dismissLoader();
-      toast.error('Something went wrong. Please try again.');
-      console.log(error);
-    }
-  };
-
-  const onOtpSubmit = async (data) => {
-    const completeOtp = otp.join("");
-    if (completeOtp.length < 4) {
-      toast.error("Please enter all 4 digits");
     } else {
-      showLoader();
-      try {
-        const otpResponse = await fetch(`${HOST}/User/Verify`, {
-          method: "POST",
-          headers: {
-            'Content-Type': 'application/json',
-          },
-          body: JSON.stringify({ userId: loginData.id, otp: completeOtp }),
-        });
-
-        const otpResponseData = await otpResponse.json();
-        dismissLoader();
-
-        if (otpResponseData.success) {
-          if (!otpResponseData.data.username || otpResponseData.data.username === " ") {
-            setUsernameRequired(true);
-            setOtpRequired(false);
-            setAccessToken(otpResponseData.data.accessToken);
-            toast.success('OTP verified. Please set your username.');
-          } else {
-            router.push("/dashboard");
-          }
-        } else {
-          toast.error('OTP verification failed.');
-        }
-      } catch (error) {
-        dismissLoader();
-        toast.error('Something went wrong.');
-        console.log(error);
-      }
+      toast.error('Login failed. Please try again.');
     }
+  } catch (error) {
+    dismissLoader();
+    toast.error('Something went wrong. Please try again.');
+  }
+};
 
-  };
-
-
-  useEffect(() => {
-    const delayDebounceFn = setTimeout(() => {
-      if (watch("username")) {
-        checkUsernameAvailability(watch("username"));
-      }
-    }, 500); // delay by 500ms
-  
-    return () => clearTimeout(delayDebounceFn);
-  }, [watch("username")]);
-
-  const checkUsernameAvailability = async (username) => {
-    setIsCheckingUsername(true);
-    try {
-      const response = await fetch(`${HOST}/User/Profile/CheckUsername`, {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-          "Authorization": `Bearer ${accessToken}`,
-        },
-        body: JSON.stringify({ username }),
-      });
-  
-      const data = await response.json();
-      if (data.success) {
-        setUsernameAvailable(true);
-      } else {
-        setUsernameAvailable(false);
-      }
-    } catch (error) {
-      console.log("Error checking username", error);
-    } finally {
-      setIsCheckingUsername(false);
-    }
-  };
-  
-  
-
-  const onUsernameSubmit = async (data) => {
+// Handle OTP verification
+const onOtpSubmit = async (data) => {
+  const completeOtp = otp.join("");
+  if (completeOtp.length < 4) {
+    toast.error("Please enter all 4 digits");
+  } else {
     showLoader();
     try {
-      const usernameResponse = await fetch(`${HOST}/User/Profile/UpdateUsername`, {
-        method: "PATCH",
-        headers: {
-          "Content-Type": "application/json",
-          "Authorization": `Bearer ${accessToken}`,
-        },
-        body: JSON.stringify({ username: data.username }),
+      const otpResponse = await fetch(`${HOST}/User/Verify`, {
+        method: "POST",
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ userId: userData.id, otp: completeOtp }),
       });
 
-      const usernameResponseData = await usernameResponse.json();
+      const otpResponseData = await otpResponse.json();
       dismissLoader();
-      console.log(usernameResponseData);
-      if (usernameResponseData.success) {
-        toast.success('Username set successfully!');
-        router.push("/dashboard");
+
+      if (otpResponseData.success) {
+        if (!otpResponseData.data.username || otpResponseData.data.username === " ") {
+          dispatch(setUsernameAvailability(null));
+          dispatch(setAccessToken(otpResponseData.data.accessToken));
+          setUsernameRequired(true);
+          setOtpRequired(false);
+          toast.success('OTP verified. Please set your username.');
+        } else {
+          router.push("/app");
+        }
       } else {
-        toast.error('Failed to set username.');
+        toast.error('OTP verification failed.');
       }
     } catch (error) {
       dismissLoader();
       toast.error('Something went wrong.');
-      console.log(error);
     }
-  };
+  }
+};
 
+// Handle username availability check
+useEffect(() => {
+  const delayDebounceFn = setTimeout(() => {
+    if (watch("username")) {
+      checkUsernameAvailability(watch("username"));
+    }
+  }, 500);
+  
+  return () => clearTimeout(delayDebounceFn);
+}, [watch("username")]);
+
+const checkUsernameAvailability = async (username) => {
+  dispatch(setCheckingUsername(true));
+  try {
+    const response = await fetch(`${HOST}/User/Profile/CheckUsername`, {
+      method: "POST",
+      headers: { "Content-Type": "application/json", "Authorization": `Bearer ${accessToken}` },
+      body: JSON.stringify({ username }),
+    });
+
+    const data = await response.json();
+    if (data.success) {
+      dispatch(setUsernameAvailability(true));
+    } else {
+      dispatch(setUsernameAvailability(false));
+    }
+  } catch (error) {
+    console.log("Error checking username", error);
+  } finally {
+    dispatch(setCheckingUsername(false));
+  }
+};
+
+const onUsernameSubmit = async (data) => {
+  showLoader();
+  try {
+    const usernameResponse = await fetch(`${HOST}/User/Profile/UpdateUsername`, {
+      method: "PATCH",
+      headers: { "Content-Type": "application/json", "Authorization": `Bearer ${accessToken}` },
+      body: JSON.stringify({ username: data.username }),
+    });
+
+    const usernameResponseData = await usernameResponse.json();
+    dismissLoader();
+    
+    if (usernameResponseData.success) {
+      toast.success('Username set successfully!');
+      dispatch(setUser(usernameResponseData.data));
+      router.push("/app");
+    } else {
+      toast.error('Failed to set username.');
+    }
+  } catch (error) {
+    dismissLoader();
+    toast.error('Something went wrong.');
+  }
+};
   return (
     <div className="flex justify-center items-center h-[100vh] text-white">
       <div className="flex flex-col gap-6">
@@ -293,12 +282,17 @@ const Login = () => {
               <div className="border flex-1 border-[#a7a7a7]"></div>
             </div>
 
-            <Button
+            {/* <WalletConnection /> */}
+
+            {/* <Button
               type="button"
               className="main-gradient inline-block rounded-lg w-full my-5 px-8 py-3 text-center font-semibold tracking-tight !text-white transition duration-200 hover:font-bold bg-gradient-to-tr from-yellow-400 to-orange-600"
+              onClick={() => document.querySelector('.wallet-adapter-button-trigger').click()} // Trigger WalletMultiButton onClick
             >
               Connect Wallet
-            </Button>
+            </Button> */}
+            <WalletMultiButton style={{}} />
+
           </form>
         )}
       </div>

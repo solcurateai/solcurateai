@@ -5,12 +5,14 @@ import ModeToggle from './ModeToggle'
 import UserMenu from './UserMenu'
 import WalletMenu from './WalletMenu'
 import LanguageMenu from './LanguageMenu'
+import SolanaTransaction from './SolanaTransaction'
 
 const Navbar = () => {
   return (
     <header className="flex h-14 items-center justify-between gap-4 bg-black-2 border-b border-black-1 px-4 lg:h-[100px] lg:px-6"> 
       <MobileNav />
       <div className="flex items-center gap-4">
+        <SolanaTransaction />
         <div className="flex items-center bg-black-3 p-4 rounded-xl gap-4">
           <Image src="/icons/coin.svg" alt="Coin" width={28} height={28} />
           <span className="text-lg font-medium text-white font-quicksand">Earning</span>

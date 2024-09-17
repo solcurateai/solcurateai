@@ -12,7 +12,7 @@ const AppCard = ({card}) => {
   return (
     <div key={card.label} className="bg-black-1 p-6 rounded-2xl">
         <div className="flex items-center justify-between">
-        <Image src={card.imageUrl} alt="Icon" width={100} height={100} />
+        <Image src={card.imageUrl} alt={card.label} width={100} height={100} />
         <Link href={pathname+card.route}><Button className="main-gradient text-white" type="button" >Generate</Button></Link> 
         </div>
         <div className="space-y-0 my-3">
