@@ -33,39 +33,41 @@ const Sidebar = () => {
               )}
             >
               <div className="flex items-center gap-3">
-              <Image
-                src={link.imgUrl}
-                alt={link.label}
-                width={24}
-                height={24}
-              />
-              <p className="text-lg font-quicksand max-lg:hidden">
-                {link.label}
-              </p>
+                <Image
+                  src={link.imgUrl}
+                  alt={link.label}
+                  width={24}
+                  height={24}
+                />
+                <p className="text-lg font-quicksand max-lg:hidden">
+                  {link.label}
+                </p>
               </div>
-              {link.status === "inactive" && 
-              <div className="main-gradient max-lg:hidden rounded-lg p-1">
-                <p className="text-white font-semibold text-[10px]">Coming soon</p>
-              </div>
+              {link.status === "inactive" &&
+                <div className="main-gradient max-lg:hidden rounded-lg p-1">
+                  <p className="text-white font-semibold text-[10px]">Coming soon</p>
+                </div>
               }
             </Link>
           );
         })}
-        
+
       </nav>
       <div className="px-4">
-            <div className="flex flex-col w-full mt-5 rounded-xl items-center justify-center bg-black-2 p-5">
-              <div className="flex items-center w-full justify-between">
-                <h1 className="font-semibold text-slate-50">0 / 10 Free Generation</h1>
-                <HelpCircle className="text-slate-50" />
-              </div>
-              <div className="h-4 px-1 my-3 w-full bg-black-1 flex items-center rounded-full">
-                <div className="w-[50%] h-3 my-3 main-gradient rounded-full"></div>
-              </div>
-              <Button type="button" className="main-gradient w-full text-slate-50 font-semibold">Upgraded to pro</Button>
-            </div>
-            <ModeToggle2 />
+        <div className="flex flex-col w-full mt-5 rounded-xl items-center justify-center bg-black-2 p-5">
+          <div className="flex items-center w-full justify-between">
+            <h1 className="font-semibold text-slate-50">0 / 10 Free Generation</h1>
+            <HelpCircle className="text-slate-50" />
           </div>
+          <div className="h-4 px-1 my-3 w-full bg-black-1 flex items-center rounded-full">
+            <div className="w-[50%] h-3 my-3 main-gradient rounded-full"></div>
+          </div>
+          <Link href="/app/subscription">
+            <Button type="button" className="main-gradient w-full text-slate-50 font-semibold">Upgrade to pro</Button>
+          </Link>
+        </div>
+        <ModeToggle2 />
+      </div>
     </div>
   );
 };

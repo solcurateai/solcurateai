@@ -17,7 +17,7 @@ const MobileNav = () => {
          <Sheet>
             <SheetTrigger>
                 <svg
-                    class="navbar-burger pt-2 text-white"
+                    className="navbar-burger pt-2 text-white"
                     fill="none"
                     height="60"
                     viewBox="0 0 70 70"

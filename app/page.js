@@ -25,9 +25,9 @@ export default function Home() {
     <div className="">
       <Navbar />
 
-      <main class="flex-1">
+      <main className="flex-1">
         <div>
-          <Image src="/images/bgwave.svg" width={500} height={500} class="w-fit h-fit absolute -top-2" alt="Background Wave" />
+          <Image src="/images/bgwave.svg" width={500} height={500} className="w-fit h-fit absolute -top-2" alt="Background Wave" />
           <Hero />
           <Features />
           <HowItWorks />

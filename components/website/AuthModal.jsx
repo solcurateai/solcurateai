@@ -63,7 +63,7 @@ const AuthModal = ({ isOpen, onClose, title, className, children, handleClick, b
                     Forgot password
                   </Link>
                   <div>
-                  <Button class="main-gradient inline-block rounded-lg w-full my-5 px-8 py-3 text-center font-semibold tracking-tight !text-white transition duration-200 hover:font-bold bg-gradient-to-tr from-yellow-400 to-orange-600"
+                  <Button className="main-gradient inline-block rounded-lg w-full my-5 px-8 py-3 text-center font-semibold tracking-tight !text-white transition duration-200 hover:font-bold bg-gradient-to-tr from-yellow-400 to-orange-600"
                 >Login</Button>
                 </div>
               </div>
