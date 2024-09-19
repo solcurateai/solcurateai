@@ -32,9 +32,9 @@ const WalletMenu = () => {
     <DropdownMenu>
       <DropdownMenuTrigger asChild>
         {publicKey ? (
-          <div className="flex items-center bg-black-3 p-4 rounded-xl gap-4">
+          <div className="flex items-center bg-black-3 p-4 rounded-xl gap-2 lg:gap-4">
             <Image src="/icons/avatar1.svg" alt="Avatar" width={28} height={28} />
-            <span className="text-lg font-medium text-white font-quicksand truncate">
+            <span className="text-lg max-lg:hidden font-medium text-white font-quicksand truncate">
               {publicKey.toBase58().slice(0, 4)}...{publicKey.toBase58().slice(-4)}
             </span>
             <ChevronDown />

@@ -13,7 +13,7 @@ const SettingSidebar = () => {
 
     return (
       <div className="flex-1">
-        <nav className="grid items-start px-2 text-sm font-medium font-quicksand lg:px-4">
+        <nav className="items-start px-2 text-sm font-medium font-quicksand lg:px-4">
           {settingLinks.map((link) => {
             // Adjust the path to include the "/app" base path
             const fullRoute = `/app/settings${link.route}`;
@@ -26,7 +26,7 @@ const SettingSidebar = () => {
                 href={fullRoute}
                 key={link.label}
                 className={cn(
-                  "flex gap-4 items-center p-4 text-white rounded-full justify-start",
+                  "flex gap-4 items-center w-fit p-4 text-white rounded-full justify-start",
                   { "border-2 border-yellow-600": isActive }
                 )}
               >

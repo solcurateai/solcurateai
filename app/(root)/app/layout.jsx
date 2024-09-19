@@ -10,23 +10,13 @@ import { useRouter } from 'next/navigation'
 import React, { useEffect, useState } from 'react'
 
 const RootLayout = ({ children }) => {
-  // const router = useRouter();
-  // const [isAuthenticated, setIsAuthenticated] = useState(false);
-
-  // useEffect(() => {
-  //   const userDetails = localStorage.getItem('userDetails');
-  //   if (!userDetails) {
-  //     // Redirect to login page if no user details are found
-  //     router.replace('/login');
-  //   }
-  // }, []);
 
   return (
-    <div className="grid min-h-screen w-full md:grid-cols-[220px_1fr] lg:grid-cols-[340px_1fr]">
-      <div className="hidden bg-black-1 md:block">
+    <div className="grid min-h-screen w-full lg:grid-cols-[340px_1fr]">
+      <div className="hidden bg-black-1 lg:block">
         <div className="flex overflow-auto h-full min-h-screen justify-between flex-col gap-2 custom-scrollbar">
           <div>
-            <div className="flex h-14 items-center border-b px-4 lg:h-[120px] lg:px-6">
+            <div className="flex h-[100px] items-center border-b px-4 lg:h-[120px] lg:px-6">
               <Link href="/" className="flex items-center justify-center w-full">
                 <Image src="/images/logo.png" alt="Logo" width={200} height={200} />
               </Link>

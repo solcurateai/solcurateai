@@ -27,9 +27,9 @@ const UserMenu = () => {
   return (
     <DropdownMenu className="border-none">
       <DropdownMenuTrigger asChild>
-        <div className="flex items-center bg-black-3 p-4 rounded-xl gap-4">
+        <div className="flex items-center bg-black-3 p-4 rounded-xl gap-2 lg:gap-4">
           <Image src="/icons/online.svg" alt="Coin" width={28} height={28} />
-          <span className="text-lg font-medium text-white truncate font-quicksand">
+          <span className="text-lg max-lg:hidden font-medium text-white truncate font-quicksand">
             {userData?.username || 'Guest'} {/* Show 'Guest' if no userData */}
           </span>
           <ChevronDown />

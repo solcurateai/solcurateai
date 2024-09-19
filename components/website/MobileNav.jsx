@@ -33,14 +33,14 @@ const MobileNav = () => {
                     <path d="M37 32H19M37 24H19" stroke="black"></path>
                 </svg>
             </SheetTrigger>
-            <SheetContent side="left" className="border-none bg-dark-1">
+            <SheetContent side="left" className="border-none bg-black-1">
                 <Link href="/" className='flex items-center gap-1'>
                     <Image 
                         src="/images/logo.png"
                         width={200}
                         height={200}
-                        alt="Yoom logo"
-                        className="max-sm:size-10"
+                        alt="logo"
+                        className=""
                     />
                 </Link>
 

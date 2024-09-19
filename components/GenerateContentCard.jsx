@@ -11,11 +11,11 @@ const GenerateContentCard = () => {
             </div>
             <div className="p-4">
                 <div className="flex items-center justify-between mb-5">
-                    <h1 className="text-white font-quicksand text-2xl font-semibold">LinkedIn Post</h1>
+                    <h1 className="text-white font-quicksand text-xl lg:text-2xl font-semibold">LinkedIn Post</h1>
                     <Copy />
                 </div>
                 
-                <p className="text-slate-100 text-xl">Ever wondered what happens when creativity meets functionality? Meet Muhammad Bashir Hassan, your go-to Product Designer! 🚀 With a knack for turning ideas into reality, Muhammad has been crafting user-centric designs that not only look good but also solve real problems. Whether you’re a startup or a well-established company, his designs will elevate your product to the next level. Ready to innovate? Let’s connect and create something amazing together! 🌟  #ProductDesign #Innovation #UserExperience #ClientSuccess #DesignThinking</p>
+                <p className="text-slate-100 text-md lg:text-xl">Ever wondered what happens when creativity meets functionality? Meet Muhammad Bashir Hassan, your go-to Product Designer! 🚀 With a knack for turning ideas into reality, Muhammad has been crafting user-centric designs that not only look good but also solve real problems. Whether you’re a startup or a well-established company, his designs will elevate your product to the next level. Ready to innovate? Let’s connect and create something amazing together! 🌟  #ProductDesign #Innovation #UserExperience #ClientSuccess #DesignThinking</p>
             </div>
         </div>
   )

@@ -6,7 +6,7 @@ const Features = () => {
     <section id="features" className="overflow-hidden py-10 sm:py-24 lg:pb-28 lg:pt-20">
         <div className="container mx-auto px-4">
             <div className="mx-auto mb-16 sm:mb-20 sm:text-center md:max-w-6xl">
-                <h1 className="font-bold my-5 text-[56px] font-clash main-gradient bg-clip-text">Why Curate AI?</h1>
+                <h1 className="font-bold my-5 text-5xl lg:text-[56px] font-clash main-gradient bg-clip-text">Why Curate AI?</h1>
             </div>
             <div className="-m-8 flex flex-wrap sm:px-8">
                 <div className="w-full p-8 md:w-1/2">

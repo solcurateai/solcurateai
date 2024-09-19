@@ -39,7 +39,7 @@ const Sidebar = () => {
                   width={24}
                   height={24}
                 />
-                <p className="text-lg font-quicksand max-lg:hidden">
+                <p className="text-lg font-quicksand max-md:hidden">
                   {link.label}
                 </p>
               </div>

@@ -8,7 +8,7 @@ const HowItWorks = () => {
             <div className="-m-8 flex flex-wrap items-center lg:items-center">
                 <div className="w-full p-4 sm:p-8 md:w-1/2">
                     <div className="md:w-full">
-                        <h1 className="font-bold font-clash my-5 text-[56px] main-gradient bg-clip-text">How It Works</h1>
+                        <h1 className="font-bold font-clash my-5 text-5xl lg:text-[56px] main-gradient bg-clip-text">How It Works</h1>
                         <div className="-m-6 flex flex-wrap">
                             <div className="w-full pl-6 pt-6">
                                 <p>Step 1</p>

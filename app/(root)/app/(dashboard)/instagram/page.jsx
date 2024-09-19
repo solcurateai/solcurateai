@@ -24,7 +24,7 @@ const FormItem = () => {
         console.log(formData);
       };
     return (
-        <form onSubmit={handleSubmit} className="p-4 grid grid-cols-2 gap-x-10">
+        <form onSubmit={handleSubmit} className="p-4 grid grid-cols-1 lg:grid-cols-2 gap-x-10">
 
     <FormField
         label="Target Audience"
@@ -191,25 +191,25 @@ const InstagramCaption = () => {
         }
     }
   return (
-    <section className="gap-4 px-4">
+    <section>
       <div className="flex flex-col text-center items-center justify-center">
-        <h1 className="font-clash text-white text-[40px] font-semibold">Instagram Caption Generation</h1>
-        <p className="font-semibold text-2xl w-[800px] text-black-4 font-quicksand">Create captivating Instagram captions that resonate with your audience and boost engagement.</p>
+        <h1 className="font-clash text-white text-2xl lg:text-[40px] font-semibold">Instagram Caption Generation</h1>
+        <p className="font-semibold text-lg text-center lg:text-2xl text-black-4 font-quicksand">Create captivating Instagram captions that resonate with your audience and boost engagement.</p>
       </div>
       <div className="my-6">
         <div className="flex gap-4">
-            <div className="flex items-center justify-start gap-4">
-            <div className={`${activeTab === 'form'? 'main-gradient text-white' : 'bg-black-4 text-[#FEFEFE]'} w-8 h-6 rounded-full font-semibold items-center flex justify-center`}>
-                    <p>1</p>
-                </div>
-                <button className={`text-xl font-semibold ${activeTab === 'form'? 'main-gradient font-semibold bg-clip-text text-black-700' : ' text-black-4'}`} onClick={() => setActiveTab('form')}>Complete the Form</button>
+          <div className="flex items-center justify-start gap-4">
+            <div className={`${activeTab === 'form' ? 'main-gradient text-white' : 'bg-black-4 text-[#FEFEFE]'} w-8 h-6 rounded-full font-semibold items-center flex justify-center`}>
+              <p className="text-sm lg:text-lg">1</p>
             </div>
-            <div className="flex items-center justify-start gap-4">
-                <div className={`${activeTab === 'content'? 'main-gradient text-white' : 'bg-black-4 text-[#FEFEFE]'} w-8 h-6 rounded-full font-semibold items-center flex justify-center`}>
-                    <p>2</p>
-                </div>
-                <button className={`text-xl font-semibold ${activeTab === 'content'? 'main-gradient bg-clip-text text-black-700' : ' text-black-4'}`} onClick={() => setActiveTab('content')}>Generated Content</button>
+            <button className={`text-sm lg:text-xl font-semibold ${activeTab === 'form' ? 'main-gradient font-semibold bg-clip-text text-black-700' : ' text-black-4'}`} onClick={() => setActiveTab('form')}>Complete the Form</button>
+          </div>
+          <div className="flex items-center justify-start gap-4">
+            <div className={`${activeTab === 'content' ? 'main-gradient text-white' : 'bg-black-4 text-[#FEFEFE]'} w-8 h-6 rounded-full font-semibold items-center flex justify-center`}>
+              <p className="text-sm lg:text-lg">2</p>
             </div>
+            <button className={`text-sm lg:text-xl font-semibold ${activeTab === 'content' ? 'main-gradient bg-clip-text text-black-700' : ' text-black-4'}`} onClick={() => setActiveTab('content')}>Generated Content</button>
+          </div>
         </div>
         <div className="my-4">
             <TabsLayout />
