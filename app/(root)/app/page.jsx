@@ -2,11 +2,17 @@ import AppCard from '@/components/AppCard'
 import React from 'react'
 
 const cardList = [
+  // {
+  //   title: "Create a Social Media Post",
+  //   subtitle: "Effortlessly create engaging content tailored for each platform, ensuring your brand stands out and connects with your audience.",
+  //   imageUrl: "/icons/social.svg",
+  //   route: "/social"
+  // },
   {
-    title: "Create a Social Media Post",
-    subtitle: "Effortlessly create engaging content tailored for each platform, ensuring your brand stands out and connects with your audience.",
-    imageUrl: "/icons/social.svg",
-    route: "/social"
+    title: "Twitter (X) Post Generation",
+    subtitle: "Compose impactful Twitter posts that cut through the noise and drive meaningful interactions.",
+    imageUrl: "/icons/3dtwitter.svg",
+    route: "/twitter"
   },
   {
     title: "Instagram Caption Generation",
@@ -33,12 +39,6 @@ const cardList = [
     route: "/tiktok"
   },
   {
-    title: "Twitter (X) Post Generation",
-    subtitle: "Compose impactful Twitter posts that cut through the noise and drive meaningful interactions.",
-    imageUrl: "/icons/3dtwitter.svg",
-    route: "/twitter"
-  },
-  {
     title: "YouTube Scripting Generation",
     subtitle: "Write engaging YouTube scripts that keep viewers watching and coming back for more.h",
     imageUrl: "/icons/youtube.svg",
@@ -58,7 +58,7 @@ const Dashboard = () => {
             <AppCard key={card.title} card={card} />
           )
         })}
-        
+
       </div>
     </section>
   )
