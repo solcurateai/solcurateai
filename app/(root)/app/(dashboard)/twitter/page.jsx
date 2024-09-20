@@ -64,11 +64,7 @@ const FormItem = ({ setActiveTab, setGeneratedText }) => {
   };
 
   return (
-<<<<<<< HEAD
-    <form onSubmit={handleSubmit(onFormSubmit)} className="p-4 grid grid-cols-1 lg:grid-cols-2 gap-x-10">
-=======
     <form onSubmit={handleSubmit} className="p-4 grid grid-cols-2 gap-x-10">
->>>>>>> 5bc98d8 (did twitter generation)
       <FormField
         label="Content Idea"
         id="contentIdea"
