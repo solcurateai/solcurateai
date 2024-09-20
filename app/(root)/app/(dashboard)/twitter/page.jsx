@@ -3,6 +3,7 @@ import FormField from '@/components/FormField';
 import GenerateContentCard from '@/components/GenerateContentCard';
 import PostForm from '@/components/PostForm';
 import { Button } from '@/components/ui/button';
+import { TextInput } from 'flowbite-react';
 import React, { useState } from 'react'
 import { useForm } from 'react-hook-form';
 
@@ -10,7 +11,7 @@ const FormItem = () => {
   const { register, handleSubmit } = useForm();
 
   const onFormSubmit = async (formData) => {
-    
+
     console.log(formData);
   };
 
