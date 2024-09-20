@@ -34,7 +34,7 @@ const FormItem = ({ setActiveTab, setGeneratedText }) => {
         {
           "parts": [
             {
-              "text": "You are a social media content creator. Based on the following inputs, generate a tweet for Twitter (X) that meets the specified criteria: Form Inputs: 1. Content Idea: tweet about career impact of web development 2. Target Audience: developers 3. Tone: casual 4. Tweet Length: 300 characters 5. Use Emojis: yes 6. Language: English"
+              "text": `You are a social media content creator. Based on the following inputs, generate a tweet for Twitter (X) that meets the specified criteria: 1. Content Idea: ${formData.contentIdea} 2. Target Audience: ${formData.audience} 3. Tone: ${formData.tone} 4. Tweet Length: ${formData.postLength} 5. Use Emojis: ${formData.emojis} 6. Language: ${formData.language}`
             }
           ]
         }
