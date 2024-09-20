@@ -2,13 +2,13 @@ import React from 'react';
 import { cn } from '@/lib/utils'; // If you have a utility function for class names
 import { Input } from './ui/input';
 import {
-    Select,
-    SelectContent,
-    SelectItem,
-    SelectTrigger,
-    SelectValue,
-  } from "@/components/ui/select"
-  
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select"
+
 
 const FormField = ({
   label,
@@ -33,23 +33,25 @@ const FormField = ({
 
       {as === 'select' ? (
         <Select
-            id={id}
-            name={id}
-            onChange={onChange}
-            required={required}
-            {...props}
+          id={id}
+          name={id}
+          // onValueChange={onChange}
+          onValueChange={(value) => onChange({ target: { name: id, value } })}
+          defaultValue={value}
+          required={required}
+          {...props}
         >
-            <SelectTrigger className={cn(
+          <SelectTrigger className={cn(
             'w-full p-2 bg-black-5 h-[52px] text-sm rounded-md shadow-sm',
             errorMessage && 'border-red-500' // Highlight border if there's an error
-            )}>
+          )}>
             <SelectValue placeholder={placeholder} />
-            </SelectTrigger>
-            <SelectContent>
-                {options.map((option) => (
-                    <SelectItem key={option.value} value={option.value}>{option.label}</SelectItem>
-                ))}
-            </SelectContent>
+          </SelectTrigger>
+          <SelectContent>
+            {options.map((option) => (
+              <SelectItem key={option.value} value={option.value}>{option.label}</SelectItem>
+            ))}
+          </SelectContent>
         </Select>
 
       ) : as === 'textarea' ? (

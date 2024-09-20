@@ -1,4 +1,6 @@
 export const HOST = "https://solcurate-api.onrender.com/api/v1"
+export const geminiUrl = "https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash-latest:generateContent?key=AIzaSyB7tOSEZvM3Vq253Ef4kCuQXcSjeifaxKs"
+
 export const websiteLinks = [
     {
         label: 'Home',
