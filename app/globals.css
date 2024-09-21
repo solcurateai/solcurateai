@@ -112,3 +112,25 @@ body {
     @apply bg-background text-foreground;
   }
 }
+
+.typerwriterDiv {
+  font-family: 'Courier New', Courier, monospace; /* Typewriter-style font */
+  white-space: pre-wrap; /* Preserve line breaks and spaces */
+  font-size: 1rem;
+  color: #f1f1f1;
+}
+
+.cursor {
+  display: inline-block;
+  background-color: #f1f1f1;
+  width: 1px;
+  height: 1em;
+  margin-left: 2px;
+  animation: blink 1s step-end infinite;
+}
+
+@keyframes blink {
+  50% {
+    background-color: transparent;
+  }
+}

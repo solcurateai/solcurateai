@@ -1,6 +1,6 @@
 import React from 'react'
 import { Clipboard } from 'flowbite-react'
-import ReactMarkdown from 'react-markdown';
+import TypewriterEffect from '@/lib/TypewriterEffect';
 
 const GenerateContentCard = ({ type, responseText }) => {
   return (
@@ -15,8 +15,9 @@ const GenerateContentCard = ({ type, responseText }) => {
         </div>
 
         <div>
-          <p className="text-slate-100 text-md">
-            <ReactMarkdown>{responseText}</ReactMarkdown>
+          <p className="text-slate-100 text-md typerwriterDiv">
+            {/* <ReactMarkdown>{responseText}</ReactMarkdown> */}
+            <TypewriterEffect text={responseText || ''} speed={50} />
           </p>
         </div>
       </div>
