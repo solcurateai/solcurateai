@@ -82,6 +82,7 @@ const onEmailSubmit = async (data) => {
       if (!responseData.data.username || responseData.data.username === " ") {
         setOtpRequired(true);
       } else {
+        localStorage.setItem('freeTrialCount', '10');
         router.push("/app");
       }
     } else {
@@ -118,6 +119,7 @@ const onOtpSubmit = async (data) => {
           setOtpRequired(false);
           toast.success('OTP verified. Please set your username.');
         } else {
+          localStorage.setItem('freeTrialCount', '10');
           router.push("/app");
         }
       } else {
@@ -178,6 +180,7 @@ const onUsernameSubmit = async (data) => {
     if (usernameResponseData.success) {
       toast.success('Username set successfully!');
       dispatch(setUser(usernameResponseData.data));
+      localStorage.setItem('freeTrialCount', '10');
       router.push("/app");
     } else {
       toast.error('Failed to set username.');

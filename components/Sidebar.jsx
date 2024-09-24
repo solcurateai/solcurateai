@@ -53,6 +53,7 @@ const Sidebar = () => {
         })}
 
       </nav>
+      
       <div className="px-4">
         <div className="flex flex-col w-full mt-5 rounded-xl items-center justify-center bg-black-2 p-5">
           <div className="flex items-center w-full justify-between">
