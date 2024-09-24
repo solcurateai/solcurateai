@@ -16,15 +16,6 @@ const FormItem = ({ setActiveTab, setGeneratedText }) => {
     language: '',
   });
   const [isGenerating, setIsGenerating] = useState(false)
-  const [count, setCount] = useState(0);
-
-  useEffect(() => {
-    // Get the current free trial count from localStorage
-    const storedCount = localStorage.getItem('freeTrialCount');
-    if (storedCount) {
-      setCount(parseInt(storedCount, 10));
-    }
-  }, []);
 
 
   const handleChange = (e) => {
