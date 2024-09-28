@@ -7,10 +7,19 @@ import React, {useState} from 'react'
 
 const FormItem = () => {
     const [formData, setFormData] = useState({
-        username: '',
-        bio: '',
-        country: ''
-      });
+      audience: '',
+      tone: '',
+      description: '',
+      styleGuidelines: '',
+      callToAction: '',
+      keywords: '',
+      captionLength: '',
+      framework: '',
+      info: '',
+      reference: '',
+      emojis: '',
+      language: ''
+    });
     
       const handleChange = (e) => {
         setFormData({
@@ -39,7 +48,7 @@ const FormItem = () => {
         id="tone"
         placeholder="Select"
         as="select"
-        value={formData.country}
+        value={formData.tone}
         onChange={handleChange}
         options={[
           { value: 'casual', label: 'Casual 👋' },
@@ -58,7 +67,7 @@ const FormItem = () => {
         id="description"
         placeholder="Provide any additional information for the post."
         as="textarea"
-        value={formData.info}
+        value={formData.description}
         onChange={handleChange}
       />
     
