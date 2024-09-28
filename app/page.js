@@ -27,7 +27,7 @@ export default function Home() {
 
       <main className="flex-1">
         <div>
-          <Image src="/images/bgwave.svg" width={500} height={500} className="w-fit h-fit absolute top-96 lg:-top-2" alt="Background Wave" />
+          <Image src="/images/bgwave.svg" width={500} height={500} className="w-fit h-fit absolute top-96 lg:-top-2 -z-10" alt="Background Wave" />
           <Hero />
           <Features />
           <HowItWorks />

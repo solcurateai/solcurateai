@@ -42,10 +42,7 @@ const UserMenu = () => {
               {userData?.username || 'Guest'} {/* Show 'Guest' if no userData */}
             </span>
           </div>
-          <Link href="/create-org" className="flex hover:bg-black-3 justify-start items-center p-4 rounded-xl gap-4">
-            <PlusCircle />
-            <span className="text-lg font-medium text-gray-200 font-quicksand">Create Organization</span>
-          </Link>
+
           <Button
             type="button"
             onClick={handleLogout}

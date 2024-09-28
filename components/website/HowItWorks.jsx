@@ -13,7 +13,7 @@ const HowItWorks = () => {
                             <div className="w-full pl-6 pt-6">
                                 <p>Step 1</p>
                                 <h3 className="mb-2 font-heading font-clash text-2xl mt-2 !font-bold tracking-tight">Input Your Preferences</h3>
-                                <p className="tracking-tight text-lg">Tell Curate AI what you need—choose your platform, set your tone, and define your goals. Whether it’s driving engagement, promoting a product, or building your brand’s story, we’ve got it covered.</p>
+                                <p className="tracking-tight text-lg">Tell SulcurateAI what you need—choose your platform, set your tone, and define your goals. Whether it’s driving engagement, promoting a product, or building your brand’s story, we’ve got it covered.</p>
                             </div>
                             <div className="w-full pl-6 pt-6">
                                 <p>Step 2</p>
