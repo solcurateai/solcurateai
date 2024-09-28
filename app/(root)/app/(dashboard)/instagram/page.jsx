@@ -3,10 +3,13 @@ import FormField from "@/components/FormField";
 import GenerateContentCard from "@/components/GenerateContentCard";
 import PostForm from "@/components/PostForm";
 import { Button } from "@/components/ui/button";
-import { geminiUrl } from "@/constants";
-import React, { useState } from "react";
+import { geminiUrl, HOST } from "@/constants";
+import React, { useState, useEffect } from "react";
+import { useSelector } from "react-redux";
 
 const FormItem = ({ setActiveTab, setGeneratedText }) => {
+  const { accessToken } = useSelector((state) => state.user);
+
   const [formData, setFormData] = useState({
     contentIdea: "",
     audience: "",
@@ -24,9 +27,32 @@ const FormItem = ({ setActiveTab, setGeneratedText }) => {
     });
   };
 
+  const [freeTrialCount, setFreeTrialCount] = useState(0);
+  const [version, setVersion] = useState("");
+
+  // Load version and freeTrialCount from localStorage on mount
+  useEffect(() => {
+    const storedVersion = localStorage.getItem("version");
+    const storedCount = parseInt(localStorage.getItem("freeTrialCount") || "0");
+
+    setVersion(storedVersion);
+    setFreeTrialCount(storedCount);
+  }, []);
+
   const handleSubmit = async (e) => {
     e.preventDefault();
     setIsGenerating(true);
+
+    const isNotPremium = version !== "premium";
+
+    if (isNotPremium && freeTrialCount === 0) {
+      setIsGenerating(false);
+      setActiveTab("content");
+      setGeneratedText(
+        "You've reached your generation limit. Please upgrade to Pro to continue generating content."
+      );
+      return;
+    }
 
     let geminiContent = {
       contents: [
@@ -39,21 +65,52 @@ const FormItem = ({ setActiveTab, setGeneratedText }) => {
         },
       ],
     };
+
     try {
       const response = await fetch(geminiUrl, {
         method: "POST",
         body: JSON.stringify(geminiContent),
       });
+
+      if (!response.ok) {
+        throw new Error("Failed to fetch generated content");
+      }
+
       const data = await response.json();
+      const responseText = data.candidates[0].content.parts[0].text;
 
-      let responseText = data.candidates[0].content.parts[0].text;
-
-      console.log(responseText);
       setIsGenerating(false);
       setActiveTab("content");
       setGeneratedText(responseText);
+
+      // Only deduct count if user is not premium
+      if (isNotPremium) {
+        try {
+          const response = await fetch(
+            `${HOST}/User/Subscribe/DeductGenerationCount`,
+            {
+              method: "POST",
+              headers: {
+                "Content-Type": "application/json",
+                Authorization: `Bearer ${accessToken}`,
+              },
+              body: JSON.stringify({}),
+            }
+          );
+
+          if (!response.ok) {
+            throw new Error("Failed to deduct generation count");
+          }
+
+          let updatedCount = freeTrialCount - 1;
+          setFreeTrialCount(updatedCount);
+          localStorage.setItem("freeTrialCount", updatedCount.toString());
+        } catch (error) {
+          console.log("Error deducting count", error);
+        }
+      }
     } catch (error) {
-      console.log(error);
+      console.log("Error generating content", error);
       setIsGenerating(false);
     }
   };

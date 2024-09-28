@@ -30,6 +30,19 @@ export default function WalletAlert({
         </AlertDialogHeader>
         <AlertDialogFooter>
           <AlertDialogAction asChild>
+            <Button
+              variant="default"
+              onClick={() => {
+                document
+                  .querySelector(".wallet-adapter-button-trigger")
+                  .click();
+                onClose();
+              }}
+            >
+              Connect Wallet
+            </Button>
+          </AlertDialogAction>
+          <AlertDialogAction asChild>
             <Button variant="primary" onClick={onClose}>
               Close
             </Button>

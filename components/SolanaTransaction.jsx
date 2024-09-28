@@ -10,31 +10,27 @@ import {
 } from "@solana/web3.js";
 import { useWallet } from "@solana/wallet-adapter-react";
 import { WalletNotConnectedError } from "@solana/wallet-adapter-base";
-import { Button } from "./ui/button"; // Assuming you have a custom Button component
-import { revalidatePath } from "next/cache";
-import {
-  AlertDialog,
-  AlertDialogAction,
-  AlertDialogContent,
-  AlertDialogDescription,
-  AlertDialogFooter,
-  AlertDialogHeader,
-  AlertDialogTitle,
-} from "@/components/ui/alert-dialog";
 import WalletAlert from "./WalletAlert";
+import { HOST } from "@/constants";
+import { useSelector } from "react-redux";
+import ProUpgradeAlert from "./ProUpgradeAlert";
+import { useRouter } from "next/navigation";
 
 // Replace with your QuickNode endpoint URL
 const QUICKNODE_URL =
   "https://alien-icy-shape.solana-devnet.quiknode.pro/1f27f94b8b39c9b4afec7e6eac7eabbd3474a373";
 
 const SolanaTransaction = () => {
+  const router = useRouter();
+  const { accessToken } = useSelector((state) => state.user);
   const [sendingTransac, setSendingTransac] = useState(false);
   const [theText, setTheText] = useState(""); // Assuming `thesummary.payment` is available elsewhere
   const [transactionSignature, setTransactionSignature] = useState(null);
   const [connection, setConnection] = useState(
     new Connection(QUICKNODE_URL, "confirmed")
   );
-  const [isAlertOpen, setIsAlertOpen] = useState(true);
+  const [isAlertOpen, setIsAlertOpen] = useState(false);
+  const [isProAlertOpen, setIsProAlertOpen] = useState(false);
 
   const { publicKey, sendTransaction } = useWallet(); // Solana wallet adapter hooks
 
@@ -81,6 +77,7 @@ const SolanaTransaction = () => {
       // Confirm the transaction
       await connection.confirmTransaction(signature, "confirmed");
       console.log("Transaction confirmed!");
+      await upgradeToPro();
       setSendingTransac(false);
     } catch (error) {
       console.error("Transaction failed:", error);
@@ -89,6 +86,40 @@ const SolanaTransaction = () => {
       // toast.warning("Something went wrong, try again!", { autoClose: 2000, theme: "colored" });
     }
   }, [publicKey, sendTransaction, connection]);
+
+  const upgradeToPro = async () => {
+    const currentDate = new Date().toJSON().slice(0, 10);
+    try {
+      const response = await fetch(`${HOST}/User/Subscribe/CreateSub`, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${accessToken}`,
+        },
+        body: JSON.stringify({
+          subscriptionType: "premium",
+          subscriptionDate: currentDate,
+        }),
+      });
+
+      const data = await response.json();
+      if (data.success === true) {
+        localStorage.setItem("version", "premium");
+      } else {
+        localStorage.setItem("version", "premium");
+      }
+
+      setIsProAlertOpen(true);
+    } catch (error) {
+      console.log("Error upgrading to pro", error);
+    }
+  };
+
+  const handleCloseProAlert = () => {
+    setIsProAlertOpen(false);
+    router.push("/app");
+    window.location.reload();
+  };
 
   return (
     <>
@@ -123,6 +154,7 @@ const SolanaTransaction = () => {
         )}
       </div>
       <WalletAlert isOpen={isAlertOpen} onClose={() => setIsAlertOpen(false)} />
+      <ProUpgradeAlert isOpen={isProAlertOpen} onClose={handleCloseProAlert} />
     </>
   );
 };

@@ -55,13 +55,6 @@ const FormField = ({
               </SelectItem>
             ))}
           </SelectContent>
-          <SelectContent>
-            {options.map((option) => (
-              <SelectItem key={option.value} value={option.value}>
-                {option.label}
-              </SelectItem>
-            ))}
-          </SelectContent>
         </Select>
       ) : as === "textarea" ? (
         <textarea
