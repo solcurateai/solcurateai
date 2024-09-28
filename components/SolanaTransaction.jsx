@@ -1,21 +1,40 @@
 "use client";
 import React, { useState, useEffect, useCallback } from "react";
-import { Connection, Keypair, LAMPORTS_PER_SOL, PublicKey, SystemProgram, Transaction } from "@solana/web3.js";
+import {
+  Connection,
+  Keypair,
+  LAMPORTS_PER_SOL,
+  PublicKey,
+  SystemProgram,
+  Transaction,
+} from "@solana/web3.js";
 import { useWallet } from "@solana/wallet-adapter-react";
 import { WalletNotConnectedError } from "@solana/wallet-adapter-base";
 import { Button } from "./ui/button"; // Assuming you have a custom Button component
 import { revalidatePath } from "next/cache";
-
-
+import {
+  AlertDialog,
+  AlertDialogAction,
+  AlertDialogContent,
+  AlertDialogDescription,
+  AlertDialogFooter,
+  AlertDialogHeader,
+  AlertDialogTitle,
+} from "@/components/ui/alert-dialog";
+import WalletAlert from "./WalletAlert";
 
 // Replace with your QuickNode endpoint URL
-const QUICKNODE_URL = "https://alien-icy-shape.solana-devnet.quiknode.pro/1f27f94b8b39c9b4afec7e6eac7eabbd3474a373";
+const QUICKNODE_URL =
+  "https://alien-icy-shape.solana-devnet.quiknode.pro/1f27f94b8b39c9b4afec7e6eac7eabbd3474a373";
 
 const SolanaTransaction = () => {
   const [sendingTransac, setSendingTransac] = useState(false);
   const [theText, setTheText] = useState(""); // Assuming `thesummary.payment` is available elsewhere
   const [transactionSignature, setTransactionSignature] = useState(null);
-  const [connection, setConnection] = useState(new Connection(QUICKNODE_URL, "confirmed"));
+  const [connection, setConnection] = useState(
+    new Connection(QUICKNODE_URL, "confirmed")
+  );
+  const [isAlertOpen, setIsAlertOpen] = useState(true);
 
   const { publicKey, sendTransaction } = useWallet(); // Solana wallet adapter hooks
 
@@ -28,6 +47,7 @@ const SolanaTransaction = () => {
   const sendSolTransaction = useCallback(async () => {
     if (!publicKey) {
       console.log("Wallet not connected!");
+      setIsAlertOpen(true);
       throw new WalletNotConnectedError();
     }
 
@@ -46,7 +66,9 @@ const SolanaTransaction = () => {
       const transaction = new Transaction().add(
         SystemProgram.transfer({
           fromPubkey: publicKey, // Sender's wallet (connected wallet)
-          toPubkey: new PublicKey("Eij13YPVMnBWjPaTXxyhh7pQnu4QxW5ZoMtKD7yE92KC"), // Replace with recipient's address
+          toPubkey: new PublicKey(
+            "Eij13YPVMnBWjPaTXxyhh7pQnu4QxW5ZoMtKD7yE92KC"
+          ), // Replace with recipient's address
           lamports: lamportsToSend, // Amount in lamports
         })
       );
@@ -60,7 +82,6 @@ const SolanaTransaction = () => {
       await connection.confirmTransaction(signature, "confirmed");
       console.log("Transaction confirmed!");
       setSendingTransac(false);
-
     } catch (error) {
       console.error("Transaction failed:", error);
       setSendingTransac(false);
@@ -69,36 +90,40 @@ const SolanaTransaction = () => {
     }
   }, [publicKey, sendTransaction, connection]);
 
-
   return (
-    <div className="text-white">
-      {sendingTransac ? (
-        <div className="flex justify-center">
-          <button className="bg-[#FF7D20] flex gap-2 text-white font-semibold px-8 py-3 rounded-full hover:bg-[#e66f1a] transition-all duration-300">
-            <div className="animate-spin rounded-full h-5 w-5 border-b-2 border-white"></div>
-            <span> Processing...</span>
-          </button>
-        </div>
-      ) : (
-        <button onClick={sendSolTransaction} className="bg-[#FF7D20] text-white font-semibold px-8 py-3 rounded-full hover:bg-[#e66f1a] transition-all duration-300">
-          Subscribe Now
-        </button>
-      )}
-
-
-      {transactionSignature && (
-        <div>
-          <p>Transaction Signature:</p>
-          <a
-            href={`https://explorer.solana.com/tx/${transactionSignature}?cluster=devnet`} // Replace with appropriate cluster
-            target="_blank"
-            rel="noreferrer"
+    <>
+      <div className="text-white">
+        {sendingTransac ? (
+          <div className="flex justify-center">
+            <button className="bg-[#FF7D20] flex gap-2 text-white font-semibold px-8 py-3 rounded-full hover:bg-[#e66f1a] transition-all duration-300">
+              <div className="animate-spin rounded-full h-5 w-5 border-b-2 border-white"></div>
+              <span> Processing...</span>
+            </button>
+          </div>
+        ) : (
+          <button
+            onClick={sendSolTransaction}
+            className="bg-[#FF7D20] text-white font-semibold px-8 py-3 rounded-full hover:bg-[#e66f1a] transition-all duration-300"
           >
-            {transactionSignature}
-          </a>
-        </div>
-      )}
-    </div>
+            Subscribe Now
+          </button>
+        )}
+
+        {transactionSignature && (
+          <div>
+            <p>Transaction Signature:</p>
+            <a
+              href={`https://explorer.solana.com/tx/${transactionSignature}?cluster=devnet`} // Replace with appropriate cluster
+              target="_blank"
+              rel="noreferrer"
+            >
+              {transactionSignature}
+            </a>
+          </div>
+        )}
+      </div>
+      <WalletAlert isOpen={isAlertOpen} onClose={() => setIsAlertOpen(false)} />
+    </>
   );
 };
 

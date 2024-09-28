@@ -3,35 +3,85 @@ import FormField from '@/components/FormField';
 import GenerateContentCard from '@/components/GenerateContentCard';
 import PostForm from '@/components/PostForm';
 import { Button } from '@/components/ui/button';
+import { geminiUrl } from '@/constants';
 import React, { useState } from 'react'
-import { useForm } from 'react-hook-form';
 
-const FormItem = () => {
-  const { register, handleSubmit } = useForm();
+const FormItem = ({ setActiveTab, setGeneratedText }) => {
+  const [formData, setFormData] = useState({
+    contentIdea: '',
+    audience: '',
+    tone: '',
+    postLength: '',
+    emojis: '',
+    language: '',
+  });
+  const [isGenerating, setIsGenerating] = useState(false)
 
-  const onFormSubmit = async (formData) => {
-    
-    console.log(formData);
+
+  const handleChange = (e) => {
+    setFormData({
+      ...formData,
+      [e.target.name]: e.target.value
+    });
+  };
+
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+    setIsGenerating(true)
+
+    let geminiContent = {
+      "contents": [
+        {
+          "parts": [
+            {
+              "text": `You are a social media content creator. Based on the following inputs, generate a tweet for Twitter (X) that meets the specified criteria:  1. Content Idea: ${formData.contentIdea} 2. Target Audience: ${formData.audience} 3. Tone: ${formData.tone} 4. Tweet Length: ${formData.postLength} 5. Use Emojis: ${formData.emojis} 6. Language: ${formData.language}`
+            }
+          ]
+        }
+      ]
+    }
+    try {
+      const response = await fetch(geminiUrl, {
+        method: "POST",
+        body: JSON.stringify(geminiContent)
+      })
+      const data = await response.json()
+
+      let responseText = data.candidates[0].content.parts[0].text
+
+      console.log(responseText)
+      setIsGenerating(false)
+      setActiveTab('content')
+      setGeneratedText(responseText)
+
+
+
+    } catch (error) {
+      console.log(error)
+      setIsGenerating(false)
+    }
+
   };
 
   return (
-    <form onSubmit={handleSubmit(onFormSubmit)} className="p-4 grid grid-cols-1 lg:grid-cols-2 gap-x-10">
+    <form onSubmit={handleSubmit} className="p-4 grid grid-cols-2 gap-x-10">
       <FormField
         label="Content Idea"
         id="contentIdea"
-        value=''
+        name="contentIdea"
         placeholder="Enter your content idea"
-        {...register("contentIdea")}
+        value={formData.idea}
+        onChange={handleChange}
         required
       />
 
       <FormField
         label="Target Audience"
         id="audience"
-        value=''
+        name="audience"
         placeholder="Enter your target audience"
-        {...register("audience")}
-        required
+        value={formData.audience}
+        onChange={handleChange}
       />
 
       {/* <FormField
@@ -52,9 +102,11 @@ const FormItem = () => {
       <FormField
         label="Tone (optional)"
         id="tone"
+        name="tone"
         placeholder="Select"
         as="select"
-        {...register("tone")}
+        value={formData.tone}
+        onChange={handleChange}
         options={[
           { value: 'casual', label: 'Casual 👋' },
           { value: 'conversational', label: 'Conversational 💬' },
@@ -71,9 +123,11 @@ const FormItem = () => {
       <FormField
         label="Tweet Length"
         id="postLength"
+        name="postLength"
         placeholder="Select"
         as="select"
-        {...register("postLength")}
+        value={formData.postLength}
+        onChange={handleChange}
         options={[
           { value: '140', label: '140 characters' },
           { value: '280', label: '280 characters' },
@@ -91,21 +145,33 @@ const FormItem = () => {
       <FormField
         label="Use Emojis?"
         id="emojis"
+        name="emojis"
         placeholder="Select"
         as="select"
-        {...register("emojis")}
+        value={formData.emojis}
+        onChange={handleChange}
         options={[
           { value: 'yes', label: 'Yes' },
           { value: 'no', label: 'No' },
         ]}
       />
+      {/* 
+      <FormField
+        label="Additional Links (optional) "
+        id="links"
+        placeholder="Add additional links"
+        value={formData.links}
+        onChange={handleChange}
+      /> */}
 
       <FormField
         label="Language"
         id="language"
+        name="language"
         placeholder="Select"
         as="select"
-        {...register("language")}
+        value={formData.language}
+        onChange={handleChange}
         options={[
           { value: 'english', label: 'English' },
           { value: 'français', label: 'Français' },
@@ -115,27 +181,35 @@ const FormItem = () => {
         ]}
       />
 
-      <Button
-        type="submit"
-        className="mt-7 h-[52px] main-gradient hover:bg-yellow-300 text-white p-2 rounded-md"
-      >
-        Submit
-      </Button>
+      <div className='flex justify-center w-full'>
+        {isGenerating ? (
+
+          <Button className="mt-7 h-[52px] main-gradient hover:bg-yellow-300 text-white p-2 rounded-md w-full gap-3">
+            <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-white"></div>
+            <span>Generating</span>
+          </Button>
+        ) : (
+          <Button type="submit" className="mt-7 h-[52px] main-gradient hover:bg-yellow-300 text-white p-2 rounded-md w-full">
+            Submit
+          </Button>
+        )}
+      </div>
     </form>
   )
 }
 
 const TwitterPost = () => {
   const [activeTab, setActiveTab] = useState('form');
+  const [generatedText, setGeneratedText] = useState('')
 
   const TabsLayout = () => {
     switch (activeTab) {
       case 'form':
-        return <FormItem />
+        return <FormItem setGeneratedText={setGeneratedText} setActiveTab={setActiveTab} />
       case 'content':
-        return <GenerateContentCard />
+        return <GenerateContentCard type="Twitter Post" responseText={generatedText} />
       default:
-        return <PostForm />
+        return <FormItem />
     }
   }
 

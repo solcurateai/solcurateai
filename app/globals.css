@@ -1,8 +1,8 @@
 @font-face {
   font-family: 'Clash Grotesk';
   src: url('/fonts/ClashGrotesk-Variable.woff2') format('woff2'),
-       url('/fonts/ClashGrotesk-Variable.woff') format('woff'),
-       url('/fonts/ClashGrotesk-Variable.ttf') format('truetype');
+    url('/fonts/ClashGrotesk-Variable.woff') format('woff'),
+    url('/fonts/ClashGrotesk-Variable.ttf') format('truetype');
 }
 
 body {
@@ -17,6 +17,12 @@ body {
 .active-gradient {
   background: linear-gradient(270deg, rgba(48, 44, 57, 0.8) 50%, rgba(81, 70, 111, 0.9) 100%);
   color: transparent;
+}
+
+.profSection {
+  background: #10172af6;
+  padding: 20px;
+  border-radius: 8px;
 }
 
 /* Customize the scrollbar track */
@@ -108,7 +114,32 @@ body {
   * {
     @apply border-border;
   }
+
   body {
     @apply bg-background text-foreground;
+  }
+}
+
+.typerwriterDiv {
+  font-family: 'Courier New', Courier, monospace;
+  /* Typewriter-style font */
+  white-space: pre-wrap;
+  /* Preserve line breaks and spaces */
+  font-size: 1rem;
+  color: #f1f1f1;
+}
+
+.cursor {
+  display: inline-block;
+  background-color: #f1f1f1;
+  width: 1px;
+  height: 1em;
+  margin-left: 2px;
+  animation: blink 1s step-end infinite;
+}
+
+@keyframes blink {
+  50% {
+    background-color: transparent;
   }
 }
