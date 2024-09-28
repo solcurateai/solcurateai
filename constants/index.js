@@ -2,6 +2,45 @@ export const HOST = "https://solcurate-api.onrender.com/api/v1"
 export const geminiUrl = "https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash-latest:generateContent?key=AIzaSyB7tOSEZvM3Vq253Ef4kCuQXcSjeifaxKs"
 export const shortenAddress = (address) => `${address.slice(0, 5)}...${address.slice(address.length - 4)}`;
 
+export const cardList = [
+    {
+        title: "Twitter (X) Post Generation",
+        subtitle: "Compose impactful Twitter posts that cut through the noise and drive meaningful interactions.",
+        imageUrl: "/icons/3dtwitter.svg",
+        route: "/twitter"
+    },
+    {
+        title: "Instagram Caption Generation",
+        subtitle: "Create captivating Instagram captions that resonate with your audience and boost engagement.",
+        imageUrl: "/icons/3dinstagram.svg",
+        route: "/instagram"
+    },
+    {
+        title: "Facebook Content Generation",
+        subtitle: "Generate compelling Facebook posts that spark conversations and drive community engagement.",
+        imageUrl: "/icons/3dfacebook.svg",
+        route: "/facebook"
+    },
+    {
+        title: "LinkedIn Post Generation",
+        subtitle: "Develop professional LinkedIn posts that establish authority and connect with industry leaders.",
+        imageUrl: "/icons/linkedin.svg",
+        route: "/linkedin"
+    },
+    {
+        title: "TikTok Scripting Generation",
+        subtitle: "Craft viral TikTok scripts that capture attention and keep viewers hooked from start to finish",
+        imageUrl: "/icons/3dtiktok.svg",
+        route: "/tiktok"
+    },
+    {
+        title: "YouTube Scripting Generation",
+        subtitle: "Write engaging YouTube scripts that keep viewers watching and coming back for more.h",
+        imageUrl: "/icons/youtube.svg",
+        route: "/youtube"
+    },
+]
+
 export const websiteLinks = [
     {
         label: 'Home',
@@ -45,7 +84,7 @@ export const sidebarLinks = [
     {
         label: 'Earning Points',
         route: '/earning-points',
-        imgUrl: '/icons/solana.svg',
+        imgUrl: '/icons/coin.svg',
         status: 'active',
     },
     // {
