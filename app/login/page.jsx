@@ -79,11 +79,7 @@ const Login = () => {
     try {
       const response = await fetch(`${HOST}/User/SignIn?type=email`, {
         method: "POST",
-<<<<<<< HEAD
         headers: { "Content-Type": "application/json" },
-=======
-        headers: { 'Content-Type': 'application/json' },
->>>>>>> 407cc11 (chnaged somethings on login page)
         body: JSON.stringify(data),
       });
       const responseData = await response.json();
@@ -93,7 +89,6 @@ const Login = () => {
         dispatch(setUser(responseData.data));
         dispatch(setAccessToken(responseData.data.accessToken));
 
-<<<<<<< HEAD
         // console.log(responseData);
         // if (!responseData.data.username || responseData.data.username === " ") {
         //   setOtpRequired(true);
@@ -105,124 +100,12 @@ const Login = () => {
         setOtpRequired(true);
       } else {
         toast.error("Login failed. Please try again.");
-=======
-      if (responseData.success) {
-        dispatch(setUser(responseData.data));
-        dispatch(setAccessToken(responseData.data.accessToken));
-
-        if (!responseData.data.username || responseData.data.username === " ") {
-          setOtpRequired(true);
-        } else {
-          localStorage.setItem('freeTrialCount', '10');
-          router.push("/app");
-        }
-      } else {
-        toast.error('Login failed. Please try again.');
-      }
-    } catch (error) {
-      dismissLoader();
-      toast.error('Something went wrong. Please try again.');
-    }
-  };
-
-  // Handle OTP verification
-  const onOtpSubmit = async (data) => {
-    const completeOtp = otp.join("");
-    if (completeOtp.length < 4) {
-      toast.error("Please enter all 4 digits");
-    } else {
-      showLoader();
-      try {
-        const otpResponse = await fetch(`${HOST}/User/Verify`, {
-          method: "POST",
-          headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({ userId: userData.id, otp: completeOtp }),
-        });
-
-        const otpResponseData = await otpResponse.json();
-        dismissLoader();
-
-        if (otpResponseData.success) {
-          if (!otpResponseData.data.username || otpResponseData.data.username === " ") {
-            dispatch(setUsernameAvailability(null));
-            dispatch(setAccessToken(otpResponseData.data.accessToken));
-            setUsernameRequired(true);
-            setOtpRequired(false);
-            toast.success('OTP verified. Please set your username.');
-          } else {
-            localStorage.setItem('freeTrialCount', '10');
-            router.push("/app");
-          }
-        } else {
-          toast.error('OTP verification failed.');
-        }
-      } catch (error) {
-        dismissLoader();
-        toast.error('Something went wrong.');
-      }
-    }
-  };
-
-  // Handle username availability check
-  useEffect(() => {
-    const delayDebounceFn = setTimeout(() => {
-      if (watch("username")) {
-        checkUsernameAvailability(watch("username"));
-      }
-    }, 500);
-
-    return () => clearTimeout(delayDebounceFn);
-  }, [watch("username")]);
-
-  const checkUsernameAvailability = async (username) => {
-    dispatch(setCheckingUsername(true));
-    try {
-      const response = await fetch(`${HOST}/User/Profile/CheckUsername`, {
-        method: "POST",
-        headers: { "Content-Type": "application/json", "Authorization": `Bearer ${accessToken}` },
-        body: JSON.stringify({ username }),
-      });
-
-      const data = await response.json();
-      if (data.success) {
-        dispatch(setUsernameAvailability(true));
-      } else {
-        dispatch(setUsernameAvailability(false));
-      }
-    } catch (error) {
-      console.log("Error checking username", error);
-    } finally {
-      dispatch(setCheckingUsername(false));
-    }
-  };
-
-  const onUsernameSubmit = async (data) => {
-    showLoader();
-    try {
-      const usernameResponse = await fetch(`${HOST}/User/Profile/UpdateUsername`, {
-        method: "PATCH",
-        headers: { "Content-Type": "application/json", "Authorization": `Bearer ${accessToken}` },
-        body: JSON.stringify({ username: data.username }),
-      });
-
-      const usernameResponseData = await usernameResponse.json();
-      dismissLoader();
-
-      if (usernameResponseData.success) {
-        toast.success('Username set successfully!');
-        dispatch(setUser(usernameResponseData.data));
-        localStorage.setItem('freeTrialCount', '10');
-        router.push("/app");
-      } else {
-        toast.error('Failed to set username.');
->>>>>>> 407cc11 (chnaged somethings on login page)
       }
     } catch (error) {
       dismissLoader();
       toast.error("Something went wrong. Please try again.");
     }
   };
-<<<<<<< HEAD
 
   // Handle OTP verification
   const onOtpSubmit = async (data) => {
@@ -336,78 +219,12 @@ const Login = () => {
       toast.error("Something went wrong.");
     }
   };
-=======
->>>>>>> 407cc11 (chnaged somethings on login page)
   return (
-    <div>
+    <>
       <div className='bg-[orange]  p-2 w-full'>
-        <p className='text-center text-sm text-[black]'>Please note: This is on a free version server, loading time might slow.</p>
+        <p className='text-center text-sm text-[black]'>Please note: This is on a free version server, loading time might be slow.</p>
       </div>
       <div className="flex justify-center items-center h-[100vh] text-white">
-
-<<<<<<< HEAD
-        {/* Username Setup Form */}
-        {usernameRequired ? (
-          <form
-            onSubmit={handleSubmit(onUsernameSubmit)}
-            className="flex flex-col gap-4"
-          >
-            <div className="relative flex items-center w-full">
-              <Input
-                className={`bg-[#252C33] h-[52px] text-lg mt-5 w-full pr-10 ${
-                  usernameAvailable === false &&
-                  !isCheckingUsername &&
-                  watch("username")
-                    ? "border-red-500"
-                    : ""
-                } ${
-                  usernameAvailable === true &&
-                  !isCheckingUsername &&
-                  watch("username")
-                    ? "border-green-500"
-                    : ""
-                }`}
-                type="text"
-                placeholder="Set your username"
-                {...register("username")}
-              />
-
-              {watch("username") && isCheckingUsername && (
-                <Loader className="absolute right-2 top-8 text-sm text-gray-500" />
-              )}
-              {watch("username") &&
-                usernameAvailable === false &&
-                !isCheckingUsername && (
-                  <X className="absolute right-2 top-8 text-sm text-red-500" />
-                )}
-              {watch("username") &&
-                usernameAvailable === true &&
-                !isCheckingUsername && (
-                  <Check className="absolute right-2 top-8 text-green-500" />
-                )}
-            </div>
-
-            <Button
-              className="main-gradient inline-block rounded-lg w-full my-5 px-8 py-3 text-center font-semibold tracking-tight !text-white transition duration-200 hover:font-bold bg-gradient-to-tr from-yellow-400 to-orange-600"
-              type="submit"
-              disabled={
-                isCheckingUsername ||
-                usernameAvailable === false ||
-                !watch("username")
-              } // Disable if username is not available, still checking, or empty
-            >
-              Set Username
-            </Button>
-          </form>
-        ) : otpRequired ? (
-          // OTP Verification Form
-          <form
-            onSubmit={handleSubmit(onOtpSubmit)}
-            className="flex flex-col gap-4"
-          >
-            <div className="flex gap-2">
-              {otp.map((_, index) => (
-=======
         <div className="flex flex-col gap-6">
           <div className="grid gap-2">
             <h1 className="text-2xl font-semibold">Login</h1>
@@ -419,12 +236,22 @@ const Login = () => {
 
           {/* Username Setup Form */}
           {usernameRequired ? (
-            <form onSubmit={handleSubmit(onUsernameSubmit)} className="flex flex-col gap-4">
+            <form
+              onSubmit={handleSubmit(onUsernameSubmit)}
+              className="flex flex-col gap-4"
+            >
               <div className="relative flex items-center w-full">
->>>>>>> 407cc11 (chnaged somethings on login page)
                 <Input
-                  className={`bg-[#252C33] h-[52px] text-lg mt-5 w-full pr-10 ${usernameAvailable === false && !isCheckingUsername && watch("username") ? "border-red-500" : ""
-                    } ${usernameAvailable === true && !isCheckingUsername && watch("username") ? "border-green-500" : ""
+                  className={`bg-[#252C33] h-[52px] text-lg mt-5 w-full pr-10 ${usernameAvailable === false &&
+                    !isCheckingUsername &&
+                    watch("username")
+                    ? "border-red-500"
+                    : ""
+                    } ${usernameAvailable === true &&
+                      !isCheckingUsername &&
+                      watch("username")
+                      ? "border-green-500"
+                      : ""
                     }`}
                   type="text"
                   placeholder="Set your username"
@@ -434,28 +261,36 @@ const Login = () => {
                 {watch("username") && isCheckingUsername && (
                   <Loader className="absolute right-2 top-8 text-sm text-gray-500" />
                 )}
-                {watch("username") && usernameAvailable === false && !isCheckingUsername && (
-                  <X className="absolute right-2 top-8 text-sm text-red-500" />
-                )}
-                {watch("username") && usernameAvailable === true && !isCheckingUsername && (
-                  <Check className="absolute right-2 top-8 text-green-500" />
-                )}
+                {watch("username") &&
+                  usernameAvailable === false &&
+                  !isCheckingUsername && (
+                    <X className="absolute right-2 top-8 text-sm text-red-500" />
+                  )}
+                {watch("username") &&
+                  usernameAvailable === true &&
+                  !isCheckingUsername && (
+                    <Check className="absolute right-2 top-8 text-green-500" />
+                  )}
               </div>
 
               <Button
                 className="main-gradient inline-block rounded-lg w-full my-5 px-8 py-3 text-center font-semibold tracking-tight !text-white transition duration-200 hover:font-bold bg-gradient-to-tr from-yellow-400 to-orange-600"
                 type="submit"
-                disabled={isCheckingUsername || usernameAvailable === false || !watch("username")} // Disable if username is not available, still checking, or empty
+                disabled={
+                  isCheckingUsername ||
+                  usernameAvailable === false ||
+                  !watch("username")
+                } // Disable if username is not available, still checking, or empty
               >
                 Set Username
               </Button>
             </form>
-
-
           ) : otpRequired ? (
             // OTP Verification Form
-            <form onSubmit={handleSubmit(onOtpSubmit)} className="flex flex-col gap-4">
-
+            <form
+              onSubmit={handleSubmit(onOtpSubmit)}
+              className="flex flex-col gap-4"
+            >
               <div className="flex gap-2">
                 {otp.map((_, index) => (
                   <Input
@@ -495,36 +330,21 @@ const Login = () => {
               </Button>
 
               {/* <div className="flex items-center gap-3">
-              <div className="border flex-1 border-[#a7a7a7]"></div>
-              <div>OR</div>
-              <div className="border flex-1 border-[#a7a7a7]"></div>
-            </div> */}
+                <div className="border flex-1 border-[#a7a7a7]"></div>
+                <div>OR</div>
+                <div className="border flex-1 border-[#a7a7a7]"></div>
+              </div>
 
-              {/* <WalletConnection /> */}
-
-              {/* <Button
-              type="button"
-              className="main-gradient inline-block rounded-lg w-full my-5 px-8 py-3 text-center font-semibold tracking-tight !text-white transition duration-200 hover:font-bold bg-gradient-to-tr from-yellow-400 to-orange-600"
-              onClick={() => document.querySelector('.wallet-adapter-button-trigger').click()} // Trigger WalletMultiButton onClick
-            >
-              Connect Wallet
-            </Button> */}
-<<<<<<< HEAD
-            <WalletMultiButton style={{}} />
-          </form>
-        )}
-=======
-              {/* <WalletMultiButton style={{}} /> */}
-
+              
+              <WalletMultiButton style={{}} /> */}
             </form>
           )}
         </div>
 
         {/* React Toastify Container */}
         <ToastContainer />
->>>>>>> 407cc11 (chnaged somethings on login page)
       </div>
-    </div>
+    </>
   );
 };
 
